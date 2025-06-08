@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Colors */
+    --color-primary: #1E3A8A; /* Deep blue (primary) - blue-800 */
+    --color-primary-50: #EFF6FF; /* Very light blue - blue-50 */
+    --color-primary-100: #DBEAFE; /* Light blue - blue-100 */
+    --color-primary-500: #3B82F6; /* Medium blue - blue-500 */
+    --color-primary-600: #2563EB; /* Darker blue - blue-600 */
+    --color-primary-700: #1D4ED8; /* Dark blue - blue-700 */
+    --color-primary-900: #1E3A8A; /* Very dark blue - blue-900 */
+
+    /* Secondary Colors */
+    --color-secondary: #64748B; /* Balanced gray-blue - slate-500 */
+    --color-secondary-50: #F8FAFC; /* Very light slate - slate-50 */
+    --color-secondary-100: #F1F5F9; /* Light slate - slate-100 */
+    --color-secondary-200: #E2E8F0; /* Light gray-blue - slate-200 */
+    --color-secondary-300: #CBD5E1; /* Medium light slate - slate-300 */
+    --color-secondary-400: #94A3B8; /* Medium slate - slate-400 */
+    --color-secondary-600: #475569; /* Dark slate - slate-600 */
+    --color-secondary-700: #334155; /* Darker slate - slate-700 */
+    --color-secondary-800: #1E293B; /* Very dark slate - slate-800 */
+    --color-secondary-900: #0F172A; /* Near black slate - slate-900 */
+
+    /* Accent Colors */
+    --color-accent: #0EA5E9; /* Bright blue accent - sky-500 */
+    --color-accent-50: #F0F9FF; /* Very light sky - sky-50 */
+    --color-accent-100: #E0F2FE; /* Light sky - sky-100 */
+    --color-accent-200: #BAE6FD; /* Light blue accent - sky-200 */
+    --color-accent-300: #7DD3FC; /* Medium light sky - sky-300 */
+    --color-accent-400: #38BDF8; /* Medium sky - sky-400 */
+    --color-accent-600: #0284C7; /* Dark sky - sky-600 */
+    --color-accent-700: #0369A1; /* Darker sky - sky-700 */
+
+    /* Background Colors */
+    --color-background: #F8FAFC; /* Soft off-white - slate-50 */
+    --color-surface: #FFFFFF; /* Pure white surface - white */
+    --color-surface-secondary: #F1F5F9; /* Secondary surface - slate-100 */
+
+    /* Text Colors */
+    --color-text-primary: #0F172A; /* Near-black primary text - slate-900 */
+    --color-text-secondary: #475569; /* Medium gray secondary text - slate-600 */
+    --color-text-tertiary: #64748B; /* Light gray tertiary text - slate-500 */
+    --color-text-inverse: #FFFFFF; /* White text for dark backgrounds - white */
+
+    /* Status Colors */
+    --color-success: #059669; /* Professional green - emerald-600 */
+    --color-success-50: #ECFDF5; /* Very light emerald - emerald-50 */
+    --color-success-100: #D1FAE5; /* Light emerald - emerald-100 */
+    --color-success-500: #10B981; /* Medium emerald - emerald-500 */
+    --color-success-700: #047857; /* Dark emerald - emerald-700 */
+
+    --color-warning: #D97706; /* Warm orange warning - amber-600 */
+    --color-warning-50: #FFFBEB; /* Very light amber - amber-50 */
+    --color-warning-100: #FEF3C7; /* Light amber - amber-100 */
+    --color-warning-500: #F59E0B; /* Medium amber - amber-500 */
+    --color-warning-700: #B45309; /* Dark amber - amber-700 */
+
+    --color-error: #DC2626; /* Clear red error - red-600 */
+    --color-error-50: #FEF2F2; /* Very light red - red-50 */
+    --color-error-100: #FEE2E2; /* Light red - red-100 */
+    --color-error-500: #EF4444; /* Medium red - red-500 */
+    --color-error-700: #B91C1C; /* Dark red - red-700 */
+
+    /* Border Colors */
+    --color-border: #E2E8F0; /* Light gray border - slate-200 */
+    --color-border-secondary: #CBD5E1; /* Secondary border - slate-300 */
+    --color-border-focus: #0EA5E9; /* Focus border - sky-500 */
+
+    /* Shadow Colors */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-text-primary font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors duration-200;
+  }
+.btn-secondary  {
+    @apply bg-secondary-100 text-secondary-700 hover:bg-secondary-200 focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+  }
+.btn-accent  {
+    @apply bg-accent text-white hover:bg-accent-600 focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-surface border border-border rounded-lg shadow-sm;
+  }
+
+  .input-field {
+    @apply border border-border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+  }
+
+  .nav-link {
+    @apply text-secondary-600 hover:text-primary transition-colors duration-200;
+  }
+
+  .nav-link-active {
+    @apply text-primary bg-primary-50 border-r-2 border-primary;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .transition-smooth {
+    transition: all 200ms ease-out;
+  }
+
+  .transition-medium {
+    transition: all 300ms ease-out;
+  }
+
+  .shadow-subtle {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-md);
+  }
+
+  .shadow-floating {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .shadow-modal {
+    box-shadow: var(--shadow-xl);
+  }
+}
