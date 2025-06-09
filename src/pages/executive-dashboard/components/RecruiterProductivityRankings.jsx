@@ -1,78 +1,11 @@
 import React, { useState } from 'react';
 import Icon from 'components/AppIcon';
+import { recruiters } from 'data/recruiters';
 
 const RecruiterProductivityRankings = ({ office, dateRange }) => {
   const [sortBy, setSortBy] = useState('revenue');
   const [viewMode, setViewMode] = useState('list');
-
-  // Mock recruiter data
-  const recruiterData = [
-    {
-      id: 1,
-      name: 'Sarah Johnson',
-      avatar: 'https://randomuser.me/api/portraits/women/1.jpg',
-      office: 'London',
-      revenue: 485000,
-      placements: 32,
-      successRate: 94,
-      avgTimeToFill: 14,
-      clientSatisfaction: 96,
-      trend: 'up',
-      badge: 'top_performer'
-    },
-    {
-      id: 2,
-      name: 'Michael Chen',
-      avatar: 'https://randomuser.me/api/portraits/men/2.jpg',
-      office: 'New York',
-      revenue: 420000,
-      placements: 28,
-      successRate: 89,
-      avgTimeToFill: 16,
-      clientSatisfaction: 92,
-      trend: 'up',
-      badge: 'rising_star'
-    },
-    {
-      id: 3,
-      name: 'Emily Rodriguez',
-      avatar: 'https://randomuser.me/api/portraits/women/3.jpg',
-      office: 'London',
-      revenue: 395000,
-      placements: 26,
-      successRate: 91,
-      avgTimeToFill: 15,
-      clientSatisfaction: 94,
-      trend: 'stable',
-      badge: null
-    },
-    {
-      id: 4,
-      name: 'David Thompson',
-      avatar: 'https://randomuser.me/api/portraits/men/4.jpg',
-      office: 'Sydney',
-      revenue: 365000,
-      placements: 24,
-      successRate: 87,
-      avgTimeToFill: 18,
-      clientSatisfaction: 89,
-      trend: 'down',
-      badge: null
-    },
-    {
-      id: 5,
-      name: 'Lisa Wang',
-      avatar: 'https://randomuser.me/api/portraits/women/5.jpg',
-      office: 'Singapore',
-      revenue: 445000,
-      placements: 30,
-      successRate: 92,
-      avgTimeToFill: 13,
-      clientSatisfaction: 95,
-      trend: 'up',
-      badge: 'efficiency_expert'
-    }
-  ];
+  const [expandedRecruiter, setExpandedRecruiter] = useState(null);
 
   const sortOptions = [
     { value: 'revenue', label: 'Revenue' },
@@ -101,13 +34,24 @@ const RecruiterProductivityRankings = ({ office, dateRange }) => {
     }
   };
 
-  const sortedRecruiters = [...recruiterData].sort((a, b) => {
-    return b[sortBy] - a[sortBy];
+  // Filter recruiters by office if specified
+  const filteredRecruiters = office === 'all' || !office 
+    ? recruiters 
+    : recruiters.filter(recruiter => recruiter.office.toLowerCase() === office.toLowerCase());
+
+  const sortedRecruiters = [...filteredRecruiters].sort((a, b) => {
+    const aValue = a.performanceMetrics[sortBy];
+    const bValue = b.performanceMetrics[sortBy];
+    return bValue - aValue;
   });
 
   const handleRecruiterClick = (recruiter) => {
     console.log('Viewing detailed performance for:', recruiter.name);
     // Implementation for detailed recruiter performance view
+  };
+
+  const toggleExpanded = (recruiterId) => {
+    setExpandedRecruiter(expandedRecruiter === recruiterId ? null : recruiterId);
   };
 
   return (
@@ -158,78 +102,177 @@ const RecruiterProductivityRankings = ({ office, dateRange }) => {
       {/* Rankings List */}
       <div className="space-y-3">
         {sortedRecruiters.map((recruiter, index) => {
-          const badge = getBadgeInfo(recruiter.badge);
+          const badge = getBadgeInfo(recruiter.performanceMetrics.badge);
+          const isExpanded = expandedRecruiter === recruiter.id;
           
           return (
             <div
               key={recruiter.id}
-              onClick={() => handleRecruiterClick(recruiter)}
-              className="flex items-center p-4 bg-secondary-50 hover:bg-secondary-100 rounded-lg transition-colors duration-200 cursor-pointer"
+              className="border border-border rounded-lg hover:shadow-elevated transition-all duration-200"
             >
-              {/* Rank */}
-              <div className="flex items-center justify-center w-8 h-8 mr-4">
-                {index < 3 ? (
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-                    index === 0 ? 'bg-warning' : 
-                    index === 1 ? 'bg-secondary-400': 'bg-warning-600'
-                  }`}>
-                    {index + 1}
+              <div
+                onClick={() => handleRecruiterClick(recruiter)}
+                className="flex items-center p-4 cursor-pointer"
+              >
+                {/* Rank */}
+                <div className="flex items-center justify-center w-8 h-8 mr-4">
+                  {index < 3 ? (
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${
+                      index === 0 ? 'bg-warning' : 
+                      index === 1 ? 'bg-secondary-400': 'bg-warning-600'
+                    }`}>
+                      {index + 1}
+                    </div>
+                  ) : (
+                    <span className="text-sm font-medium text-text-secondary">#{index + 1}</span>
+                  )}
+                </div>
+
+                {/* Avatar & Info */}
+                <div className="flex items-center flex-1 min-w-0">
+                  <img
+                    src={recruiter.avatar}
+                    alt={recruiter.name}
+                    className="w-10 h-10 rounded-full mr-3"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-2">
+                      <h4 className="text-sm font-medium text-text-primary truncate">
+                        {recruiter.name}
+                      </h4>
+                      {badge && (
+                        <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
+                          <Icon name={badge.icon} size={10} />
+                          <span>{badge.label}</span>
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center space-x-2 text-xs text-text-secondary">
+                      <span>{recruiter.role}</span>
+                      <span>•</span>
+                      <span>{recruiter.office}</span>
+                      <span>•</span>
+                      <span>{recruiter.specializations[0]}</span>
+                    </div>
                   </div>
-                ) : (
-                  <span className="text-sm font-medium text-text-secondary">#{index + 1}</span>
-                )}
-              </div>
+                </div>
 
-              {/* Avatar & Info */}
-              <div className="flex items-center flex-1 min-w-0">
-                <img
-                  src={recruiter.avatar}
-                  alt={recruiter.name}
-                  className="w-10 h-10 rounded-full mr-3"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2">
-                    <h4 className="text-sm font-medium text-text-primary truncate">
-                      {recruiter.name}
-                    </h4>
-                    {badge && (
-                      <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
-                        <Icon name={badge.icon} size={10} />
-                        <span>{badge.label}</span>
-                      </span>
-                    )}
+                {/* Metrics */}
+                <div className="hidden md:flex items-center space-x-6 mr-4">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-text-primary">
+                      ${(recruiter.performanceMetrics.revenue / 1000).toFixed(0)}k
+                    </p>
+                    <p className="text-xs text-text-secondary">Revenue</p>
                   </div>
-                  <p className="text-xs text-text-secondary">{recruiter.office}</p>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-text-primary">{recruiter.performanceMetrics.placements}</p>
+                    <p className="text-xs text-text-secondary">Placements</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-text-primary">{recruiter.performanceMetrics.successRate}%</p>
+                    <p className="text-xs text-text-secondary">Success Rate</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-text-primary">{recruiter.performanceMetrics.avgTimeToFill}d</p>
+                    <p className="text-xs text-text-secondary">Avg. Fill Time</p>
+                  </div>
+                </div>
+
+                {/* Trend & Expand */}
+                <div className="flex items-center space-x-3">
+                  {getTrendIcon(recruiter.performanceMetrics.trend)}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpanded(recruiter.id);
+                    }}
+                    className="p-1 hover:bg-secondary-100 rounded transition-colors duration-200"
+                  >
+                    <Icon name={isExpanded ? "ChevronUp" : "ChevronDown"} size={16} className="text-secondary-400" />
+                  </button>
                 </div>
               </div>
 
-              {/* Metrics */}
-              <div className="hidden md:flex items-center space-x-6 mr-4">
-                <div className="text-center">
-                  <p className="text-sm font-medium text-text-primary">
-                    ${(recruiter.revenue / 1000).toFixed(0)}k
-                  </p>
-                  <p className="text-xs text-text-secondary">Revenue</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium text-text-primary">{recruiter.placements}</p>
-                  <p className="text-xs text-text-secondary">Placements</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium text-text-primary">{recruiter.successRate}%</p>
-                  <p className="text-xs text-text-secondary">Success Rate</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium text-text-primary">{recruiter.avgTimeToFill}d</p>
-                  <p className="text-xs text-text-secondary">Avg. Fill Time</p>
-                </div>
-              </div>
+              {/* Expanded Details */}
+              {isExpanded && (
+                <div className="border-t border-border p-4 bg-secondary-50">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Specializations */}
+                    <div>
+                      <h5 className="text-sm font-medium text-text-primary mb-2">Specializations</h5>
+                      <div className="flex flex-wrap gap-1">
+                        {recruiter.specializations.slice(0, 3).map((spec, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-primary-100 text-primary text-xs rounded-full">
+                            {spec}
+                          </span>
+                        ))}
+                        {recruiter.specializations.length > 3 && (
+                          <span className="px-2 py-1 bg-secondary-100 text-secondary-600 text-xs rounded-full">
+                            +{recruiter.specializations.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
 
-              {/* Trend & Action */}
-              <div className="flex items-center space-x-3">
-                {getTrendIcon(recruiter.trend)}
-                <Icon name="ChevronRight" size={16} className="text-secondary-400" />
-              </div>
+                    {/* Goals Progress */}
+                    <div>
+                      <h5 className="text-sm font-medium text-text-primary mb-2">Goal Progress</h5>
+                      <div className="space-y-2">
+                        {recruiter.goals.slice(0, 2).map((goal, idx) => (
+                          <div key={idx}>
+                            <div className="flex justify-between text-xs mb-1">
+                              <span className="text-text-secondary truncate">{goal.description}</span>
+                              <span className="text-text-primary font-medium">{goal.progress}%</span>
+                            </div>
+                            <div className="w-full bg-secondary-200 rounded-full h-1.5">
+                              <div 
+                                className="bg-primary h-1.5 rounded-full transition-all duration-300"
+                                style={{ width: `${goal.progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Contact Info */}
+                    <div>
+                      <h5 className="text-sm font-medium text-text-primary mb-2">Contact</h5>
+                      <div className="space-y-1 text-xs text-text-secondary">
+                        <div className="flex items-center space-x-2">
+                          <Icon name="Mail" size={12} />
+                          <span>{recruiter.email}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Icon name="Phone" size={12} />
+                          <span>{recruiter.phone}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Icon name="MapPin" size={12} />
+                          <span>{recruiter.office}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="flex items-center space-x-3 mt-4 pt-4 border-t border-border">
+                    <button className="flex items-center space-x-1 px-3 py-1 bg-primary-100 text-primary rounded-md hover:bg-primary-200 transition-colors duration-200 text-sm">
+                      <Icon name="MessageCircle" size={14} />
+                      <span>Message</span>
+                    </button>
+                    <button className="flex items-center space-x-1 px-3 py-1 bg-accent-100 text-accent rounded-md hover:bg-accent-200 transition-colors duration-200 text-sm">
+                      <Icon name="Calendar" size={14} />
+                      <span>Schedule</span>
+                    </button>
+                    <button className="flex items-center space-x-1 px-3 py-1 bg-secondary-100 text-secondary-700 rounded-md hover:bg-secondary-200 transition-colors duration-200 text-sm">
+                      <Icon name="BarChart3" size={14} />
+                      <span>View Performance</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
@@ -239,25 +282,25 @@ const RecruiterProductivityRankings = ({ office, dateRange }) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-4 border-t border-border">
         <div className="text-center">
           <p className="text-lg font-bold text-text-primary">
-            ${(sortedRecruiters.reduce((sum, r) => sum + r.revenue, 0) / 1000).toFixed(0)}k
+            ${(sortedRecruiters.reduce((sum, r) => sum + r.performanceMetrics.revenue, 0) / 1000).toFixed(0)}k
           </p>
           <p className="text-xs text-text-secondary">Total Revenue</p>
         </div>
         <div className="text-center">
           <p className="text-lg font-bold text-text-primary">
-            {sortedRecruiters.reduce((sum, r) => sum + r.placements, 0)}
+            {sortedRecruiters.reduce((sum, r) => sum + r.performanceMetrics.placements, 0)}
           </p>
           <p className="text-xs text-text-secondary">Total Placements</p>
         </div>
         <div className="text-center">
           <p className="text-lg font-bold text-text-primary">
-            {(sortedRecruiters.reduce((sum, r) => sum + r.successRate, 0) / sortedRecruiters.length).toFixed(1)}%
+            {(sortedRecruiters.reduce((sum, r) => sum + r.performanceMetrics.successRate, 0) / sortedRecruiters.length).toFixed(1)}%
           </p>
           <p className="text-xs text-text-secondary">Avg. Success Rate</p>
         </div>
         <div className="text-center">
           <p className="text-lg font-bold text-text-primary">
-            {(sortedRecruiters.reduce((sum, r) => sum + r.avgTimeToFill, 0) / sortedRecruiters.length).toFixed(1)}d
+            {(sortedRecruiters.reduce((sum, r) => sum + r.performanceMetrics.avgTimeToFill, 0) / sortedRecruiters.length).toFixed(1)}d
           </p>
           <p className="text-xs text-text-secondary">Avg. Fill Time</p>
         </div>

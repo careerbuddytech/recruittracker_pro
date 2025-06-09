@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'components/AppIcon';
+import { recruiters } from 'data/recruiters';
 
 const CalculationEngine = ({ commissionStructures }) => {
   const [formData, setFormData] = useState({
@@ -14,16 +15,6 @@ const CalculationEngine = ({ commissionStructures }) => {
 
   const [calculationResult, setCalculationResult] = useState(null);
   const [errors, setErrors] = useState({});
-
-  // Mock recruiter data for team splits
-  const recruiters = [
-    'Sarah Johnson',
-    'David Chen',
-    'Lisa Park',
-    'Mark Thompson',
-    'Emily Watson',
-    'James Wilson'
-  ];
 
   const validateForm = () => {
     const newErrors = {};
@@ -309,7 +300,9 @@ const CalculationEngine = ({ commissionStructures }) => {
                   >
                     <option value="">Select recruiter</option>
                     {recruiters.map(recruiter => (
-                      <option key={recruiter} value={recruiter}>{recruiter}</option>
+                      <option key={recruiter.id} value={recruiter.name}>
+                        {recruiter.name} - {recruiter.role}
+                      </option>
                     ))}
                   </select>
                 </div>

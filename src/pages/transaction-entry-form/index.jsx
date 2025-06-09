@@ -10,6 +10,7 @@ import ActionButtons from './components/ActionButtons';
 import IntegrationStatus from './components/IntegrationStatus';
 import { useForm } from 'react-hook-form';
 import SERVICE_TYPES from 'constants/serviceTypes';
+import { recruiters } from 'data/recruiters';
 
 const TransactionEntryForm = () => {
   const navigate = useNavigate();
@@ -62,12 +63,7 @@ const TransactionEntryForm = () => {
         { id: 'cand4', name: 'Anna Martinez' },
         { id: 'cand5', name: 'Robert Kim' }
       ],
-      recruiters: [
-        { id: 'r1', name: 'Sarah Johnson' },
-        { id: 'r2', name: 'David Chen' },
-        { id: 'r3', name: 'Lisa Park' },
-        { id: 'r4', name: 'Mark Thompson' }
-      ]
+      recruiters: recruiters // Use the detailed recruiter data
     });
   }, []);
 

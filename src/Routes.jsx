@@ -11,6 +11,7 @@ import FinancialAnalyticsDashboard from "pages/financial-analytics-dashboard";
 import CommissionCalculator from "pages/commission-calculator";
 import UserAdministrationPanel from "pages/user-administration-panel";
 import TransactionEntryForm from "pages/transaction-entry-form";
+import RecruiterProfile from "pages/recruiter-profile";
 import NotFound from "pages/NotFound";
 
 const Routes = () => {
@@ -31,6 +32,7 @@ const Routes = () => {
               <Route path="/commission-calculator" element={<CommissionCalculator />} />
               <Route path="/user-administration-panel" element={<UserAdministrationPanel />} />
               <Route path="/transaction-entry-form" element={<TransactionEntryForm />} />
+              <Route path="/recruiter/:id" element={<RecruiterProfile />} />
               <Route path="*" element={<NotFound />} />
             </RouterRoutes>
           </main>
