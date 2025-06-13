@@ -5,7 +5,12 @@ import ErrorBoundary from "components/ErrorBoundary";
 import Header from "components/ui/Header";
 import Sidebar from "components/ui/Sidebar";
 import ExecutiveDashboard from "pages/executive-dashboard";
-import RevenueTracking from "pages/revenue-tracking";
+import ClientCandidateDatabase from "pages/client-candidate-database";
+import InvoiceManagementCenter from "pages/invoice-management-center";
+import FinancialAnalyticsDashboard from "pages/financial-analytics-dashboard";
+import CommissionCalculator from "pages/commission-calculator";
+import UserAdministrationPanel from "pages/user-administration-panel";
+import TransactionEntryForm from "pages/transaction-entry-form";
 import NotFound from "pages/NotFound";
 
 const Routes = () => {
@@ -20,7 +25,12 @@ const Routes = () => {
             <RouterRoutes>
               <Route path="/" element={<ExecutiveDashboard />} />
               <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
-              <Route path="/revenue-tracking" element={<RevenueTracking />} />
+              <Route path="/client-candidate-database" element={<ClientCandidateDatabase />} />
+              <Route path="/invoice-management-center" element={<InvoiceManagementCenter />} />
+              <Route path="/financial-analytics-dashboard" element={<FinancialAnalyticsDashboard />} />
+              <Route path="/commission-calculator" element={<CommissionCalculator />} />
+              <Route path="/user-administration-panel" element={<UserAdministrationPanel />} />
+              <Route path="/transaction-entry-form" element={<TransactionEntryForm />} />
               <Route path="*" element={<NotFound />} />
             </RouterRoutes>
           </main>
